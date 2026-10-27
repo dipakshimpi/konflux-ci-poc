@@ -1,0 +1,19 @@
+apiVersion: tekton.dev/v1
+kind: PipelineRun
+metadata:
+  name: konflux-poc-pipeline-run
+spec:
+  pipelineRef:
+    name: konflux-poc-pipeline
+  workspaces:
+    - name: shared-source
+      volumeClaimTemplate:
+        metadata:
+          name: konflux-poc-source
+        spec:
+          accessModes:
+            - ReadWriteOnce
+          resources:
+            requests:
+              storage: 1Gi
+          storageClassName: standard

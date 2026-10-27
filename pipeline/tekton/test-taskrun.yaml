@@ -1,0 +1,12 @@
+apiVersion: tekton.dev/v1
+kind: TaskRun
+metadata:
+  name: run-unit-tests
+
+spec:
+  taskRef:
+    name: run-unit-tests
+
+  workspaces:
+    - name: source
+      emptyDir: {}

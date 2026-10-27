@@ -1,0 +1,10 @@
+apiVersion: tekton.dev/v1
+kind: TaskRun
+metadata:
+  name: build-container-image-run
+spec:
+  taskRef:
+    name: build-container-image
+  workspaces:
+    - name: source
+      emptyDir: {}

@@ -1,0 +1,19 @@
+apiVersion: tekton.dev/v1
+kind: Task
+metadata:
+  name: run-unit-tests
+spec:
+  workspaces:
+    - name: source
+
+  steps:
+    - name: clone-repository
+      image: alpine/git:latest
+      script: |
+        git clone https://github.com/dipakshimpi/konflux-ci-poc.git "$(workspaces.source.path)/repo"
+
+    - name: run-unit-tests
+      image: python:3.10-slim
+      workingDir: $(workspaces.source.path)/repo
+      script: |
+        python -m unittest discover -s tests -v

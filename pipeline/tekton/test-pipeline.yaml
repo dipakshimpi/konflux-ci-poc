@@ -1,0 +1,24 @@
+apiVersion: tekton.dev/v1
+kind: Pipeline
+metadata:
+  name: konflux-poc-pipeline
+spec:
+  workspaces:
+    - name: shared-source
+
+  tasks:
+    - name: run-tests
+      taskRef:
+        name: run-unit-tests
+      workspaces:
+        - name: source
+          workspace: shared-source
+
+    - name: build-image
+      runAfter:
+        - run-tests
+      taskRef:
+        name: build-container-image
+      workspaces:
+        - name: source
+          workspace: shared-source

@@ -1,0 +1,37 @@
+apiVersion: tekton.dev/v1
+kind: Task
+metadata:
+  name: build-container-image
+spec:
+  workspaces:
+    - name: source
+
+  steps:
+    - name: build-and-export-image
+      image: quay.io/buildah/stable:latest
+      workingDir: $(workspaces.source.path)/repo
+      script: |
+        set -eu
+
+        echo "Checking source workspace..."
+        pwd
+        ls -la
+        echo "Checking repository directory..."
+        ls -la /workspace/source
+        echo "Checking expected files..."
+        ls -la app/ || true
+        ls -l Dockerfile || true
+
+        echo "Building container image..."
+        buildah --storage-driver=vfs bud -t localhost/konflux-poc:0.1 .
+
+        echo "Listing built images..."
+        buildah --storage-driver=vfs images
+
+        echo "Exporting image to a tar archive..."
+        buildah --storage-driver=vfs push localhost/konflux-poc:0.1 docker-archive:$(workspaces.source.path)/konflux-poc.tar:konflux-poc:0.1
+
+        echo "Checking exported archive..."
+        ls -lh "$(workspaces.source.path)/konflux-poc.tar"
+
+        echo "Image build and export completed successfully."
