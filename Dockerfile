@@ -1,4 +1,4 @@
-FROM python:3.10-slim
+FROM python:3.12-slim
 
 WORKDIR /app
 
@@ -10,5 +10,3 @@ USER appuser
 EXPOSE 8000
 
 CMD ["python", "app/app.py"]
-
-

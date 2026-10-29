@@ -11,7 +11,7 @@ def run_command(name,command):
     return result.returncode == 0
 
 
-if run_command("Unit tests", ["python", "-c", "raise SystemExit(1)"]):
+if run_command("Unit tests", ["python", "-m", "unittest", "discover", "-s", "tests", "-v"]):
     print("Tests passed.")
 else:
     print("Tests failed.")
